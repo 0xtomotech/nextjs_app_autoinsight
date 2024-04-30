@@ -4,19 +4,21 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { CarProps } from '@/types';
 import CustomButton from './CustomButton';
-import { calculateCarRent } from '@/utils';
+import { calculateCarRent, generateRandomCarImageUrl } from '@/utils';
 import CarDetails from './CarDetails';
 
 interface CarCardProps {
     car: CarProps;
+    imageUrl: string;
 }
 
-const CarCard = ({ car }: CarCardProps) => {
+const CarCard = ({ car, imageUrl }: CarCardProps) => {
     const { city_mpg, year, make, model, transmission, drive } = car;
 
     const [isOpen, setIsOpen] = useState(false);
 
     const carRent = calculateCarRent(city_mpg, year);
+    console.log(imageUrl)
 
     return (
         <div className='car-card group'>
@@ -38,8 +40,9 @@ const CarCard = ({ car }: CarCardProps) => {
             </p>
 
             <div className='relative w-full h-40 my-3 object-contain'>
-                <Image src="/hero3.png" fill alt="car model"  priority className='object-contain'/>
+                <Image src={imageUrl} fill sizes='100rem' alt="car model"  priority className='object-contain'/>
             </div>
+
 
             <div className='relative flex w-full mt-2'>
                 <div className="flex group-hover:invisible w-full justify-between text-gray">
@@ -77,7 +80,7 @@ const CarCard = ({ car }: CarCardProps) => {
 
             </div>
 
-            <CarDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} car={car} />
+            <CarDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} car={car} imageUrl={imageUrl} />
         </div>
     )
 }

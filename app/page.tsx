@@ -1,12 +1,11 @@
 import { CarCard, CustomFilter, Hero, SearchBar } from "@/components";
-import { fetchCars } from "@/utils";
+import { fetchCars, generateRandomCarImageUrl } from "@/utils";
 import Image from "next/image";
 
 export default async function Home() {
 
   const allCars = await fetchCars();
-
-  
+  console.log(allCars);
 
   const isDataEmpty = !Array.isArray(allCars) || allCars.length <1 || !allCars;
 
@@ -33,14 +32,14 @@ export default async function Home() {
           <section>
             <div className="home__cars-wrapper">
               {allCars?.map((car) => (
-                <CarCard car={car} />
+                <CarCard car={car} imageUrl={car.imageUrl} key={car.uniqueKey} />
                 ))}
             </div>
           </section>
         ) : (
           <div className="home__error-container">
             <h2 className="text-black text-xl font-bold">Oops, no results...</h2>
-            <p>{allCars?.message}</p>
+            <p>something</p>
           </div>
         )}
 

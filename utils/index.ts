@@ -1,5 +1,18 @@
 import { CarProps } from "@/types";
 
+
+export const generateImageUrl = () => {
+  const randomNumber = Math.floor(Math.random() * 530) + 1;
+
+  return `/player_images_small/${randomNumber}.png`
+}
+
+export const generateRandomCarImageUrl = () => {
+const randomNumber = Math.floor(Math.random() * 15) + 1;
+
+return `/cars/car${randomNumber}.png`
+}
+
 export async function fetchCars() {
     const headers = {
 		'X-RapidAPI-Key': '2dd99f97aamsheb0833beeea5a70p147974jsn1e4b954dd823',
@@ -10,8 +23,13 @@ export async function fetchCars() {
         headers: headers,
     });
 
-    const result = await response.json();
-    return result;
+    const cars = await response.json() as CarProps[];
+    return cars.map((car) => ({
+      ...car,
+      imageUrl: generateRandomCarImageUrl(),
+      // Generate a unique key for each car and add a random number to the end
+      uniqueKey: `${car.make}-${car.model}-${Math.floor(Math.random() * 1000)}`,
+    }));
 }
 
 export const calculateCarRent = (city_mpg: number, year: number) => {
@@ -28,7 +46,3 @@ export const calculateCarRent = (city_mpg: number, year: number) => {
   
     return rentalRatePerDay.toFixed(0);
   };
-
-// export const generateImageUrl = (car: CarProps, angle?: string) => {
-    
-// }
