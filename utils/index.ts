@@ -1,4 +1,4 @@
-import { CarProps } from "@/types";
+import { CarProps, FilterProps } from "@/types";
 
 
 export const generateImageUrl = () => {
@@ -13,23 +13,26 @@ const randomNumber = Math.floor(Math.random() * 15) + 1;
 return `/cars/car${randomNumber}.png`
 }
 
-export async function fetchCars() {
-    const headers = {
-		'X-RapidAPI-Key': '2dd99f97aamsheb0833beeea5a70p147974jsn1e4b954dd823',
-		'X-RapidAPI-Host': 'cars-by-api-ninjas.p.rapidapi.com'
-	}
+export async function fetchCars(filters: FilterProps) {
 
-    const response = await fetch('https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?model=carrera', {
-        headers: headers,
-    });
+  const { manufacturer, year, fuel, limit, model } = filters;
+  
+  const headers = {
+    'X-RapidAPI-Key': '2dd99f97aamsheb0833beeea5a70p147974jsn1e4b954dd823',
+    'X-RapidAPI-Host': 'cars-by-api-ninjas.p.rapidapi.com'
+  }
 
-    const cars = await response.json() as CarProps[];
-    return cars.map((car) => ({
-      ...car,
-      imageUrl: generateRandomCarImageUrl(),
-      // Generate a unique key for each car and add a random number to the end
-      uniqueKey: `${car.make}-${car.model}-${Math.floor(Math.random() * 1000)}`,
-    }));
+  const response = await fetch(`https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?make=${manufacturer}&year=${year}&model=${model}&limit=${limit}&fuel_type=${fuel}`, {
+      headers: headers,
+  });
+
+  const cars = await response.json() as CarProps[];
+  return cars.map((car) => ({
+    ...car,
+    imageUrl: generateRandomCarImageUrl(),
+    // Generate a unique key for each car and add a random number to the end
+    uniqueKey: `${car.make}-${car.model}-${Math.floor(Math.random() * 1000)}`,
+  }));
 }
 
 export const calculateCarRent = (city_mpg: number, year: number) => {
