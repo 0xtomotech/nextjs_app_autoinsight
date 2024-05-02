@@ -1,4 +1,4 @@
-import { CarCard, CustomFilter, Hero, SearchBar } from "@/components";
+import { CarCard, CustomFilter, Hero, SearchBar, ShowMore } from "@/components";
 import { fuels, yearsOfProduction } from "@/constants";
 import { HomeProps } from "@/types";
 import { fetchCars, generateRandomCarImageUrl } from "@/utils";
@@ -13,8 +13,6 @@ export default async function Home({ searchParams }: HomeProps) {
     limit: searchParams.limit || 10,
     model: searchParams.model || "",
   });
-  console.log(allCars);
-
   const isDataEmpty = !Array.isArray(allCars) || allCars.length <1 || !allCars;
 
   return (
@@ -43,6 +41,11 @@ export default async function Home({ searchParams }: HomeProps) {
                 <CarCard car={car} imageUrl={car.imageUrl} key={car.uniqueKey} />
                 ))}
             </div>
+
+            <ShowMore
+              pageNumber={(searchParams.limit || 10) / 10}
+              isNext={(searchParams.limit || 10) < allCars.length}
+            />
           </section>
         ) : (
           <div className="home__error-container">

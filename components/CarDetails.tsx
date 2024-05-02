@@ -15,7 +15,6 @@ interface CarDetailsProps {
 }
 
 const CarDetails = ({ isOpen, closeModal, car, imageUrl}: CarDetailsProps) => {
-    console.log(imageUrl);
 
   return (
     <>
